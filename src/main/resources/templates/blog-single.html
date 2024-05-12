@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>UETStudy - Cho đi là còn mãi</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+
+  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+  <link rel="stylesheet" th:href="@{css/animate.css}">
+
+  <link rel="stylesheet" th:href="@{css/owl.carousel.min.css}">
+  <link rel="stylesheet" th:href="@{css/owl.theme.default.min.css}">
+  <link rel="stylesheet" th:href="@{css/magnific-popup.css}">
+
+  <link rel="stylesheet" th:href="@{css/bootstrap-datepicker.css}">
+  <link rel="stylesheet" th:href="@{css/jquery.timepicker.css}">
+
+
+  <link rel="stylesheet" th:href="@{css/flaticon.css}">
+  <link rel="stylesheet" th:href="@{css/style.css}">
+
+  <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="./images/favicon-32x32.png"
+  />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap");
+    :root {
+      --Moderate-blue: hsl(238, 40%, 52%);
+      --Soft-Red: hsl(358, 79%, 66%);
+      --Light-grayish-blue: hsl(239, 57%, 85%);
+      --Pale-red: hsl(357, 100%, 86%);
+
+      --Dark-blue: hsl(212, 24%, 26%);
+      --Grayish-Blue: hsl(211, 10%, 45%);
+      --Light-gray: hsl(223, 19%, 93%);
+      /* --Very-light-gray: hsl(228, 33%, 97%);
+      --White: hsl(0, 0%, 100%); */
+    }
+    p{
+      line-height: 1.5;
+    }
+
+    a{
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    button{
+      cursor: pointer;
+    }
+    button:hover{
+      filter: saturate(80%);
+    }
+    .bu-primary{
+      background-color: var(--Moderate-blue);
+      border: none;
+      padding: .75rem 1.5rem;
+      border-radius: 4px;
+    }
+    .comment-section{
+      padding: 0 1rem;
+    }
+    .container{
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .comments-wrp {
+      display: flex;
+      flex-direction: column;
+    }
+    .comment-section{
+      max-width: 75ch;
+      margin: auto;
+      margin-top: 1rem;
+    }
+    .comment{
+      margin-bottom: 1rem;
+      display: grid;
+      grid-template-areas:
+          "score user controls"
+          "score comment comment"
+          "score comment comment"
+    ;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.5rem;
+      row-gap: 1rem;
+      color: var(--Grayish-Blue);
+    }
+
+    .c-score{
+      color: var(--Moderate-blue);
+      font-weight: 500;
+      grid-area: score;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 1rem;
+      padding: .75rem;
+      padding-top: .5rem;
+      width: 1rem;
+      box-sizing: content-box;
+      border-radius: 8px;
+      align-self: flex-start;
+    }
+    .score-control{
+      width: 100%;
+      cursor: pointer;
+      object-fit: scale-down;
+    }
+    .c-text{
+      grid-area: comment;
+      width: 100%;
+    }
+    .c-user{
+      width: 100%;
+      grid-area: user;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .usr-name{
+      color: var(--Dark-blue);
+      font-weight: 700;
+    }
+    .usr-img{
+      height: 2rem;
+      width: 2rem;
+    }
+
+    .c-controls{
+      display: flex;
+      gap: 1rem;
+      color: var(--Moderate-blue);
+      grid-area: controls;
+      align-self: center;
+      justify-self: flex-end;
+    }
+    .c-controls a{
+      align-items: center;
+    }
+    .edit , .reply{
+      color: var(--Moderate-blue);
+    }
+    .edit{
+      display: none;
+    }
+    .delete{
+      color: var(--Soft-Red);
+      display: none;
+    }
+    .control-icon{
+      margin-right: .5rem;
+    }
+
+    .replies{
+      display: flex;
+      margin-left: 2.5rem;
+      padding-left: 2.4rem;
+      border-left: 1px solid var(--Light-grayish-blue);
+    }
+
+    .reply-to{
+      color: var(--Moderate-blue);
+      font-weight: 500;
+    }
+
+    .reply-input{
+      display: grid;
+      margin-bottom: 1rem;
+      grid-template-areas: "avatar input button";
+      grid-template-columns: min-content auto min-content;
+      justify-items: center;
+      gap: 1rem;
+      min-height: 9rem;
+    }
+    .reply-input img{
+      grid-area: avatar;
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+    .reply-input button{
+      grid-area: button;
+      align-self: flex-start;
+    }
+    .reply-input textarea{
+      grid-area: input;
+      padding: 1rem;
+      width: 100%;
+      border: 1px solid var(--Light-gray);
+      border-radius: 4px;
+      resize: none;
+    }
+
+    .this-user .usr-name::after{
+      font-weight: 400;
+      content: "you";
+      background-color: var(--Moderate-blue);
+      padding: 0 .4rem;
+      padding-bottom: .2rem;
+      font-size: .8rem;
+      margin-left: .5rem;
+      border-radius: 2px;
+    }
+
+    .this-user .reply{
+      display: none;
+    }
+    .this-user .edit , .this-user .delete{
+      display: flex;
+    }
+    .modal-wrp{
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0,0,0,.3);
+    }
+
+    .modal{
+      padding: 1.5rem;
+      max-width: 32ch;
+      display: grid;
+      gap: 1rem;
+      grid-template-areas:
+      "heading heading"
+      "body body"
+      "no yes";
+    }
+
+    .invisible{
+      display: none;
+    }
+
+    .modal h3{
+      grid-area: heading;
+      color: var(--Dark-blue);
+    }
+    .modal button{
+      padding: .75rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 500;
+    }
+    .modal p{
+      grid-area: body;
+      color: var(--Grayish-Blue);
+      line-height: 1.5;
+    }
+    .modal .yes{
+      grid-area: yes;
+      background-color: var(--Soft-Red);
+    }
+    .modal .no{
+      background-color: var(--Grayish-Blue);
+      grid-area: no;
+    }
+
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+  <div class="container">
+    <a class="navbar-brand" ><span>UET</span>Study</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="oi oi-menu"></span> Menu
+    </button>
+
+    <div class="collapse navbar-collapse" id="ftco-nav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a th:href="@{/course}" class="nav-link">Tài liệu</a></li>
+        <li class="nav-item"><a th:href="@{/share}" class="nav-link">Share tài liệu</a></li>
+        <li class="nav-item"><a th:href="@{/note}" class="nav-link">Ghi chú</a></li>
+        <li class="nav-item active"><a th:href="@{blog-single}" class="nav-link">Forum</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-user"></i>
+          </a>
+          <div th:if="${authentication != null}">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li th:if="${roles != null && roles.contains('ADMIN')}"><a class="dropdown-item" th:href="@{/admin}">Admin-Site</a></li>
+              <li><a class="dropdown-item" th:href="@{/your-documents}">Tài liệu của tôi</a></li>
+              <li><a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a></li>
+            </ul>
+          </div>
+          <div th:unless="${authentication}">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" th:href="@{/login}">Đăng nhập</a></li>
+              <li><a class="dropdown-item" th:href="@{/register}">Đăng kí</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- END nav -->
+
+<section class="hero-wrap hero-wrap-2" th:style="'background-image: url(\'images/bg_1.jpg\');'">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text align-items-end justify-content-center">
+      <div class="col-md-12 ftco-animate pb-5 text-center">
+        <h1 class="mb-0 bread">Cùng nhau trao đổi dưới đây nhé</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<template class="reply-input-template">
+  <div class="reply-input container">
+    <img th:src="@{images/avatars/image-juliusomo.webp}" alt="" class="usr-img">
+    <textarea class="cmnt-input" id="commentInput" placeholder="Add a comment..."></textarea>
+    <button class="bu-primary" id="submitButton">SEND</button>
+  </div>
+</template>
+
+<template class="comment-template">
+  <div class="comment-wrp">
+    <div class="comment container">
+      <div class="c-score">
+        <img th:src="@{images/icon-plus.svg}" alt="plus" class="score-control score-plus">
+        <p class="score-number">5</p>
+        <img th:src="@{images/icon-minus.svg}" alt="minus" class="score-control score-minus">
+      </div>
+      <div class="c-controls">
+        <a  class="delete"><img th:src="@{images/icon-delete.svg}" alt="" class="control-icon">Delete</a>
+        <a  class="edit"><img th:src="@{images/icon-edit.svg}" alt="" class="control-icon">Edit</a>
+        <a  class="reply"><img th:src="@{images/icon-reply.svg}" alt="" class="control-icon">Reply</a>
+      </div>
+      <div class="c-user">
+        <img th:src="@{images/avatars/image-maxblagun.webp}" alt="" class="usr-img">
+        <p class="usr-name">maxblagun</p>
+        <p class="cmnt-at">2 weeks ago</p>
+      </div>
+      <p class="c-text">
+        <span class="reply-to"></span>
+        <span class="c-body"></span>
+      </p>
+    </div><!--comment-->
+    <div class="replies comments-wrp">
+    </div><!--replies-->
+  </div>
+</template>
+<main>
+  <div class="comment-section">
+
+    <div class="comments-wrp">
+
+    </div> <!--commentS wrapper-->
+    <div class="reply-input container">
+      <img th:src="@{images/avatars/image-juliusomo.webp}" alt="" class="usr-img">
+      <textarea class="cmnt-input" placeholder="Add a comment..."></textarea>
+      <button class="bu-primary" >SEND</button>
+    </div> <!--reply input-->
+  </div> <!--comment sectio-->
+
+  <div class="modal-wrp invisible">
+    <div class="modal container">
+      <h3>Delete comment</h3>
+      <p>Are you sure you want to delete this comment? This will remove the comment and cant be undone</p>
+      <button class="yes">YES,DELETE</button>
+      <button class="no">NO,CANCEL</button>
+    </div>
+  </div>
+</main>
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+<script th:src="@{js/jquery.min.js}"></script>
+<script th:src="@{js/jquery-migrate-3.0.1.min.js}"></script>
+<script th:src="@{js/popper.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/jquery.easing.1.3.js}"></script>
+<script th:src="@{js/jquery.waypoints.min.js}"></script>
+<script th:src="@{js/jquery.stellar.min.js}"></script>
+<script th:src="@{js/owl.carousel.min.js}"></script>
+<script th:src="@{js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{js/bootstrap-datepicker.js}"></script>
+<script th:src="@{js/scrollax.min.js}"></script>
+<script th:src="@{js/google-map.js}"></script>
+<script th:src="@{js/main.js}"></script>
+<script>
+  const data = {
+    currentUser: {
+      image: {
+        png: "./images/avatars/image-juliusomo.png",
+        webp: "./images/avatars/image-juliusomo.webp",
+      },
+      username: "hiepchip3108",
+    },
+    comments: [
+      {
+        parent: 0,
+        id: 1,
+        content:
+                "MN ai có tổng hợp full công thức môn Tín hiệu & Hệ thống cho e/mình xin với ạ, em học môn này đầu cứ ong ong 😟😟😟",
+        createdAt: "1 month ago",
+        score: 12,
+        user: {
+          image: {
+            png: "./images/avatars/image-amyrobson.png",
+            webp: "./images/avatars/image-amyrobson.webp",
+          },
+          username: "phamtatthanh2210",
+        },
+        replies: [],
+      },
+      {
+        parent: 0,
+        id: 2,
+        content:
+                "Xin phép ngoài chủ đề: Chào các anh chị em. Mình K63 tìm đối bóng đá tối  thứ 5 (09/05) đá giao lưu vui vẻ chia đôi tiền sân hoặc 6-4 với đội mình lúc 20h30 trên sân An Bình sau bộ Công An. Bọn mình đá trình trung bình, đá giao lưu giải trí là chính. Cảm ơn mọi người đã đọc",
+        createdAt: "2 weeks ago",
+        score: 5,
+        user: {
+          image: {
+            png: "./images/avatars/image-maxblagun.png",
+            webp: "./images/avatars/image-maxblagun.webp",
+          },
+          username: "minhtoan",
+        },
+        replies: [
+          {
+            parent: 2,
+            id: 1,
+            content:
+                    "Đội a có đối chưa",
+            createdAt: "1 week ago",
+            score: 4,
+            replyingTo: "minhtoan",
+            user: {
+              image: {
+                png: "./images/avatars/image-ramsesmiron.png",
+                webp: "./images/avatars/image-ramsesmiron.webp",
+              },
+              username: "ducchung31",
+            },
+          },
+          {
+            parent: 2,
+            id: 1,
+            content:
+                    "Giao lưu đội nhà mình chủ nhật 20h45 ko bro",
+            createdAt: "2 days ago",
+            score: 2,
+            replyingTo: "minhtoan",
+            user: {
+              image: {
+                png: "./images/avatars/image-juliusomo.png",
+                webp: "./images/avatars/image-juliusomo.webp",
+              },
+              username: "thanhdo",
+            },
+          },
+        ],
+      },
+    ],
+  };
+  function appendFrag(frag, parent) {
+    var children = [].slice.call(frag.childNodes, 0);
+    parent.appendChild(frag);
+    //console.log(children);
+    return children[1];
+  }
+
+  const addComment = (body, parentId, replyTo = undefined) => {
+    let commentParent =
+            parentId === 0
+                    ? data.comments
+                    : data.comments.filter((c) => c.id == parentId)[0].replies;
+    let newComment = {
+      parent: parentId,
+      id:
+              commentParent.length == 0
+                      ? 1
+                      : commentParent[commentParent.length - 1].id + 1,
+      content: body,
+      createdAt: "Now",
+      replyingTo: replyTo,
+      score: 0,
+      replies: parent == 0 ? [] : undefined,
+      user: data.currentUser,
+    };
+    commentParent.push(newComment);
+    initComments();
+  };
+  const deleteComment = (commentObject) => {
+    if (commentObject.parent == 0) {
+      data.comments = data.comments.filter((e) => e != commentObject);
+    } else {
+      data.comments.filter((e) => e.id === commentObject.parent)[0].replies =
+              data.comments
+                      .filter((e) => e.id === commentObject.parent)[0]
+                      .replies.filter((e) => e != commentObject);
+    }
+    initComments();
+  };
+
+  const promptDel = (commentObject) => {
+    const modalWrp = document.querySelector(".modal-wrp");
+    modalWrp.classList.remove("invisible");
+    modalWrp.querySelector(".yes").addEventListener("click", () => {
+      deleteComment(commentObject);
+      modalWrp.classList.add("invisible");
+    });
+    modalWrp.querySelector(".no").addEventListener("click", () => {
+      modalWrp.classList.add("invisible");
+    });
+  };
+
+  const spawnReplyInput = (parent, parentId, replyTo = undefined) => {
+    if (parent.querySelectorAll(".reply-input")) {
+      parent.querySelectorAll(".reply-input").forEach((e) => {
+        e.remove();
+      });
+    }
+    const inputTemplate = document.querySelector(".reply-input-template");
+    const inputNode = inputTemplate.content.cloneNode(true);
+    const addedInput = appendFrag(inputNode, parent);
+    addedInput.querySelector(".bu-primary").addEventListener("click", () => {
+      let commentBody = addedInput.querySelector(".cmnt-input").value;
+      if (commentBody.length == 0) return;
+      addComment(commentBody, parentId, replyTo);
+    });
+  };
+
+  const createCommentNode = (commentObject) => {
+    const commentTemplate = document.querySelector(".comment-template");
+    var commentNode = commentTemplate.content.cloneNode(true);
+    commentNode.querySelector(".usr-name").textContent =
+            commentObject.user.username;
+    commentNode.querySelector(".usr-img").src = commentObject.user.image.webp;
+    commentNode.querySelector(".score-number").textContent = commentObject.score;
+    commentNode.querySelector(".cmnt-at").textContent = commentObject.createdAt;
+    commentNode.querySelector(".c-body").textContent = commentObject.content;
+    if (commentObject.replyingTo)
+      commentNode.querySelector(".reply-to").textContent =
+              "@" + commentObject.replyingTo;
+
+    commentNode.querySelector(".score-plus").addEventListener("click", () => {
+      commentObject.score++;
+      initComments();
+    });
+
+    commentNode.querySelector(".score-minus").addEventListener("click", () => {
+      commentObject.score--;
+      if (commentObject.score < 0) commentObject.score = 0;
+      initComments();
+    });
+    if (commentObject.user.username == data.currentUser.username) {
+      commentNode.querySelector(".comment").classList.add("this-user");
+      commentNode.querySelector(".delete").addEventListener("click", () => {
+        promptDel(commentObject);
+      });
+      commentNode.querySelector(".edit").addEventListener("click", (e) => {
+        const path = e.path[3].querySelector(".c-body");
+        if (
+                path.getAttribute("contenteditable") == false ||
+                path.getAttribute("contenteditable") == null
+        ) {
+          path.setAttribute("contenteditable", true);
+          path.focus()
+        } else {
+          path.removeAttribute("contenteditable");
+        }
+
+      });
+      return commentNode;
+    }
+    return commentNode;
+  };
+
+  const appendComment = (parentNode, commentNode, parentId) => {
+    const bu_reply = commentNode.querySelector(".reply");
+    // parentNode.appendChild(commentNode);
+    const appendedCmnt = appendFrag(commentNode, parentNode);
+    const replyTo = appendedCmnt.querySelector(".usr-name").textContent;
+    bu_reply.addEventListener("click", () => {
+      if (parentNode.classList.contains("replies")) {
+        spawnReplyInput(parentNode, parentId, replyTo);
+      } else {
+        //console.log(appendedCmnt.querySelector(".replies"));
+        spawnReplyInput(
+                appendedCmnt.querySelector(".replies"),
+                parentId,
+                replyTo
+        );
+      }
+    });
+  };
+
+  function initComments(
+          commentList = data.comments,
+          parent = document.querySelector(".comments-wrp")
+  ) {
+    parent.innerHTML = "";
+    commentList.forEach((element) => {
+      var parentId = element.parent == 0 ? element.id : element.parent;
+      const comment_node = createCommentNode(element);
+      if (element.replies && element.replies.length > 0) {
+        initComments(element.replies, comment_node.querySelector(".replies"));
+      }
+      appendComment(parent, comment_node, parentId);
+    });
+  }
+
+  initComments();
+
+
+
+  const cmntInput = document.querySelector(".reply-input");
+  cmntInput.querySelector(".bu-primary").addEventListener("click", () => {
+    let commentBody = cmntInput.querySelector(".cmnt-input").value;
+    if (commentBody.length == 0) return;
+    addComment(commentBody, 0);
+    cmntInput.querySelector(".cmnt-input").value = "";
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <title>UETStudy - Cho đi là còn mãi</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css}"
+          integrity="sha512-..." crossorigin="anonymous"/>
+    <link rel="stylesheet" th:href="@{https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" th:href="@{css/animate.css}">
+
+    <link rel="stylesheet" th:href="@{css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{css/magnific-popup.css}">
+
+    <link rel="stylesheet" th:href="@{css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" th:href="@{css/jquery.timepicker.css}">
+
+
+    <link rel="stylesheet" th:href="@{css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/course}"><span>UET</span>Study</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a th:href="@{/course}" class="nav-link">Tài liệu</a></li>
+                <li class="nav-item"><a th:href="@{/share}" class="nav-link">Share tài liệu</a></li>
+                <li class="nav-item"><a th:href="@{/note}" class="nav-link">Ghi chú</a></li>
+                <li class="nav-item"><a th:href="@{/blog-single}" class="nav-link">Forum</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="far fa-user"></i>
+                    </a>
+                    <div th:if="${authentication != null}">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li th:if="${roles != null && roles.contains('ADMIN')}"><a class="dropdown-item" th:href="@{/admin}">Admin-Site</a></li>
+                            <li><a class="dropdown-item" th:href="@{/your-documents}">Tài liệu của tôi</a></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                    <div th:unless="${authentication}">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" th:href="@{/login}">Đăng nhập</a></li>
+                            <li><a class="dropdown-item" th:href="@{/register}">Đăng kí</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <div  th:if="${authentication != null}"><span th:text="${authentication.getName()} "style="color: #007bff;"></span></div>
+        </div>
+    </div>
+</nav>
+<!-- END nav -->
+
+<section class="hero-wrap hero-wrap-2" th:style="'background-image: url(\'images/bg_2.jpg\');'">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate pb-5 text-center">
+                <h1 class="mb-0 bread">UETStudy - Kéo xuống để xem</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="row-lg-12">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="sidebar-box bg-white ftco-animate ">
+                            <form action="#" class="search-form">
+                                <div class="form-outline">
+                                    <span class="icon fa fa-search"></span>
+                                    <input type="search" class="form-control" id="searchDocument"
+                                           placeholder="Tìm kiếm theo tên...">
+                                </div>
+                            </form>
+
+                        </div>
+                        <form id="findDocumentForm">
+                            <!-- Nút submit Bootstrap -->
+                            <button type="submit" class="btn btn-primary">Tìm kiếm tài liệu</button>
+                        </form>
+                    </div>
+                    <!-- Department selection -->
+                    <div class="col-lg-3">
+                        <div class="sidebar-box bg-white ftco-animate">
+                            <form>
+                                <div class="form-group">
+                                    <select class="form-control" name="department" id="department">
+                                        <option value="" disabled selected>-- Chọn Khoa & Viện --</option>
+                                        <option th:each="department : ${allDepartment}"
+                                                th:value="${department.getDepartmentId()}"
+                                                th:text="${department.getDepartmentName()}"></option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Knowledge block selection -->
+                    <div class="col-lg-3">
+                        <div class="sidebar-box bg-white ftco-animate">
+                            <form action="#" class="browse-form">
+                                <div class="form-group">
+                                    <select class="form-control" name="knowledgeBlock" id="knowledgeBlock">
+                                        <option value="" disabled selected>-- Chọn khối kiến thức --</option>
+                                        <!-- Options for knowledge blocks will be added here by JavaScript -->
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Subject selection -->
+                    <div class="col-lg-3">
+                        <div class="sidebar-box bg-white ftco-animate">
+                            <form action="#" class="browse-form">
+                                <div class="form-group">
+                                    <select class="form-control" name="subject" id="subject">
+                                        <option value="" disabled selected>-- Chọn môn học --</option>
+                                        <!-- Options for subjects will be added here by JavaScript -->
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                    <!-- Document display -->
+                    <div class="row" id="document">
+                        <div th:each="document : ${allDocuments}"
+                             class="col-md-6 d-flex align-items-stretch ftco-animate rounded">
+                            <div class="project-wrap">
+                                <div class="text p-4">
+                                    <a th:href="@{'/uploads/files/' + ${document.getDocumentFile()}}" target="_blank">
+                                        <h3 th:text="${document.getDocumentTitle()}"></h3>
+                                    </a>
+                                    <p>
+                                        <a th:href="@{'/uploads/files/' + ${document.getDocumentFile()}}"
+                                           target="_blank" th:text="${document.getDocumentContent()}"></a>
+                                    </p>
+                                    <ul class="d-flex justify-content-between">
+                                        <li><span class="flaticon-shower"></span><span class="date-created"
+                                                                                       th:text="${document.getDateCreated()}"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li th:if="${allDocuments.number != 0}" class="page-item">
+                                <a th:href="@{'/course?page=' + ${allDocuments.number - 1} + '&size=' + ${allDocuments.size}}"
+                                   class="page-link">Previous</a>
+                            </li>
+                            <li th:if="${allDocuments.totalPages >1}" th:each="pageNumber : ${#numbers.sequence(0, allDocuments.totalPages - 1)}"
+                                th:class="${pageNumber == allDocuments.number ? 'page-item active' : 'page-item'}">
+                                <a th:href="@{'/course?page=' + ${pageNumber} + '&size=' + ${allDocuments.size}}"
+                                   class="page-link" th:text="${pageNumber + 1}"></a>
+                            </li>
+                            <li th:if="${allDocuments.number + 1 < allDocuments.totalPages}" class="page-item">
+                                <a th:href="@{'/course?page=' + ${allDocuments.number + 1} + '&size=' + ${allDocuments.size}}"
+                                   class="page-link">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+<footer class="ftco-footer ftco-no-pt">
+
+</footer>
+
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00"/>
+    </svg>
+</div>
+
+
+<script th:src="@{js/jquery.min.js}"></script>
+<script th:src="@{js/jquery-migrate-3.0.1.min.js}"></script>
+<script th:src="@{js/popper.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/jquery.easing.1.3.js}"></script>
+<script th:src="@{js/jquery.waypoints.min.js}"></script>
+<script th:src="@{js/jquery.stellar.min.js}"></script>
+<script th:src="@{js/owl.carousel.min.js}"></script>
+<script th:src="@{js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{js/bootstrap-datepicker.js}"></script>
+<script th:src="@{js/scrollax.min.js}"></script>
+<script th:src="@{js/main.js}"></script>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+</body>
+</html>

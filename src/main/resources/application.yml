@@ -1,0 +1,45 @@
+server:
+  port: 8020
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/documentvnu?createDatabaseIfNotExist=true&useSSL=true
+    username: root
+    password: iamthanhdzpro1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    username: phngtatthanh@gmail.com
+    password: bnfl uvzq pmzw wxrv
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 158183967303-5a5g8jkc64vltd9099vchupe01lpqlj9.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+          facebook:
+            client-id: 978802150494833
+            client-secret: 68e238930105a79a5dc32bc338543486
+            scope:
+              - email
+              - public_profile
