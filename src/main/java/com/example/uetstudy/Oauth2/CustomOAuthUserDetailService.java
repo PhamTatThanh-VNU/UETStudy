@@ -54,6 +54,7 @@ public class CustomOAuthUserDetailService extends DefaultOAuth2UserService{
 
     private Student updateExistingUser(Student existingStudent, StudentDTO studentInfoDTO) {
         existingStudent.setFullName(studentInfoDTO.getFullName());
+        existingStudent.setProvider_id(studentInfoDTO.getProviderId());
         return studentRepository.save(existingStudent);
     }
 
