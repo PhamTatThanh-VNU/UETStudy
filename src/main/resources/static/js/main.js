@@ -559,25 +559,6 @@ $(document).ready(function() {
                     </div>`;
 				commentsContainer.append(commentHTML);
 			});
-
-			// Attach click event for delete comment links
-			$('.delete-comment').on('click', function (e) {
-				e.preventDefault();
-				let deleteHref = $(this).attr('href');
-				let commentCard = $(this).closest('.card');
-
-				$.ajax({
-					url: deleteHref,
-					type: 'get',
-					success: function(result) {
-						// On success, remove the comment from the DOM
-						commentCard.remove();
-					},
-					error: function(error) {
-						console.log('Error deleting comment:', error);
-					}
-				});
-			});
 		});
 	});
 });
@@ -602,7 +583,6 @@ $(document).ready(function() {
 					let commentsContainer = $('#commentsContainer');
 					commentsContainer.html(''); // Clear the container first
 					comments.forEach(function(comment) {
-						console.log(canDelele)
 						let commentHTML = `
 						<div class="card mb-2" style="background-color: #ADD8E6;" data-comment-id="${comment.cmtId}">
 							<div class="card-body">
@@ -620,25 +600,6 @@ $(document).ready(function() {
 							</div>
 						</div>`;
 						commentsContainer.append(commentHTML);
-					});
-
-					// Attach click event for delete comment links
-					$('.delete-comment').on('click', function (e) {
-						e.preventDefault();
-						let deleteHref = $(this).attr('href');
-						let commentCard = $(this).closest('.card');
-
-						$.ajax({
-							url: deleteHref,
-							type: 'get',
-							success: function(result) {
-								// On success, remove the comment from the DOM
-								commentCard.remove();
-							},
-							error: function(error) {
-								console.log('Error deleting comment:', error);
-							}
-						});
 					});
 				});
 			},
