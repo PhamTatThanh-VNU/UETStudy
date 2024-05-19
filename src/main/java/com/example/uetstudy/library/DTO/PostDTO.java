@@ -17,14 +17,6 @@ public class PostDTO {
     private String postContent;
     private Timestamp dateCreated;
     private Student student;
-    private List<Comment> comments;
-    public PostDTO(Long postId, String postTopic, String postContent, Timestamp dateCreated,List<Comment> comments) {
-        this.postId = postId;
-        this.postTopic = postTopic;
-        this.postContent = postContent;
-        this.dateCreated = dateCreated;
-        this.comments=comments;
-    }
 
 
 }

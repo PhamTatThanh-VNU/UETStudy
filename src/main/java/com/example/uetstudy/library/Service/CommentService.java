@@ -8,7 +8,8 @@ import com.example.uetstudy.library.Model.Comment;
 import java.util.List;
 
 public interface CommentService {
-    List<CommentDTO> findCommentByPostId(Long postId);
+    Comment save(Comment comment);
+    List<CommentDTO> findCommentByPostId(Long id);
     void deleteCommentById(Long id);
     Comment  updateCommentById(Long id, Comment comment);
 

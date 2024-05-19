@@ -56,7 +56,7 @@ public class MainController {
     }
 
     @PostMapping("/share")
-    public String save(MultipartFile file,Document document,Model model) {
+    public String save(MultipartFile file,Document document) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             Student student = studentService.findByUserName(authentication.getName());
@@ -133,9 +133,11 @@ public class MainController {
     public String blogView(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
-        List<String> roleNames = roles.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         List <Post> posts= postService.findAll();
-        model.addAttribute("roles", roleNames);
+        model.addAttribute("post",new Post());
+        model.addAttribute("allPost",posts);
+        model.addAttribute("userName", authentication.getName());
+        model.addAttribute("roles",roles);
         model.addAttribute("authentication",authentication);
         return "blog-single";
     }

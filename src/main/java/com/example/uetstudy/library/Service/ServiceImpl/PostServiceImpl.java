@@ -1,9 +1,12 @@
 package com.example.uetstudy.library.Service.ServiceImpl;
 
 
+import com.example.uetstudy.library.DTO.CommentDTO;
+import com.example.uetstudy.library.DTO.PostAndCommentsDTO;
 import com.example.uetstudy.library.DTO.PostDTO;
 import com.example.uetstudy.library.Model.Note;
 import com.example.uetstudy.library.Model.Post;
+import com.example.uetstudy.library.Repository.CommentRepository;
 import com.example.uetstudy.library.Repository.PostRepository;
 import com.example.uetstudy.library.Service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +23,19 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
-    public List<PostDTO> findPostByStudentId(Long studentId) {
-        return postRepository.findPostByStudentId(studentId);
+    public Post save(Post post) {
+        Post savePost = new Post();
+        savePost.setPostTopic(post.getPostTopic());
+        savePost.setPostContent(post.getPostContent());
+        savePost.setStudent(post.getStudent());
+        savePost.setDateCreated(post.getDateCreated());
+        return postRepository.save(savePost);
+    }
+    @Override
+    public PostAndCommentsDTO findPostDTOById(Long id) {
+        PostDTO postDTO = postRepository.findPostById(id);
+        List<CommentDTO> commentDTOs = postRepository.findCommentsByPostId(postDTO.getPostId());
+        return new PostAndCommentsDTO(postDTO, commentDTOs);
     }
 
     @Override
@@ -34,10 +49,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePostById(Long id, Post post) {
-        Post postUpdate = postRepository.getReferenceById(id);
+    public Optional<Post> findPostById(Long id) {
+        return postRepository.findById(id);
+    }
+
+    @Override
+    public Post updatePostById(Post post) {
+        Post postUpdate = postRepository.getReferenceById(post.getPostId());
         postUpdate.setPostTopic(post.getPostTopic());
         postUpdate.setPostContent(post.getPostContent());
+        postUpdate.setStudent(post.getStudent());
         return postRepository.save(postUpdate);
     }
 }

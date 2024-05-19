@@ -18,8 +18,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     @Override
-    public List<CommentDTO> findCommentByPostId(Long postId) {
-        return commentRepository.findCommentByPostId(postId);
+    public List<CommentDTO> findCommentByPostId(Long id) {
+        return commentRepository.findCommentByPostId(id);
     }
 
     @Override
@@ -32,5 +32,15 @@ public class CommentServiceImpl implements CommentService {
         Comment commentUpdate = commentRepository.getReferenceById(id);
         commentUpdate.setCmtContent(comment.getCmtContent());;
         return commentRepository.save(commentUpdate);
+    }
+
+    @Override
+    public Comment save(Comment comment) {
+        Comment newComment = new Comment();
+        newComment.setCmtContent(comment.getCmtContent());
+        newComment.setStudent(comment.getStudent());
+        newComment.setPost(comment.getPost());
+        newComment.setDateCreated(comment.getDateCreated());
+        return commentRepository.save(newComment);
     }
 }
