@@ -2,20 +2,16 @@ package com.example.uetstudy.Controller;
 
 import com.example.uetstudy.library.DTO.DocumentDTO;
 import com.example.uetstudy.library.DTO.NoteDTO;
-import com.example.uetstudy.library.Model.Department;
-import com.example.uetstudy.library.Model.Document;
-import com.example.uetstudy.library.Model.Note;
-import com.example.uetstudy.library.Model.Student;
-import com.example.uetstudy.library.Service.DepartmentService;
-import com.example.uetstudy.library.Service.DocumentService;
-import com.example.uetstudy.library.Service.NoteService;
-import com.example.uetstudy.library.Service.StudentService;
+import com.example.uetstudy.library.DTO.PostDTO;
+import com.example.uetstudy.library.Model.*;
+import com.example.uetstudy.library.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +33,8 @@ public class MainController {
     private DepartmentService departmentService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private PostService postService;
 
     @GetMapping("/course")
     public String courseView(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size,Model model) {
@@ -58,7 +56,7 @@ public class MainController {
     }
 
     @PostMapping("/share")
-    public String save(MultipartFile file,Document document,Model model) {
+    public String save(MultipartFile file,Document document) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             Student student = studentService.findByUserName(authentication.getName());
@@ -131,14 +129,15 @@ public class MainController {
         return "redirect:/note";
     }
 
-
-
     @GetMapping("/blog-single")
     public String blogView(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
-        List<String> roleNames = roles.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        model.addAttribute("roles", roleNames);
+        List <Post> posts= postService.findAll();
+        model.addAttribute("post",new Post());
+        model.addAttribute("allPost",posts);
+        model.addAttribute("userName", authentication.getName());
+        model.addAttribute("roles",roles);
         model.addAttribute("authentication",authentication);
         return "blog-single";
     }

@@ -467,7 +467,6 @@ $(document).ready(function() {
 		event.preventDefault();
 		let href = $(this).attr('href');
 		$.get(href, function (subject) {
-			console.log(subject)
 			$('#subjectId').val(subject.subjectId);
 			$('#subjectNameUpdate').val(subject.subjectName);
 			$('#subject-knowledgeUpdate').val(subject.knowledgeBlock.blockId);
@@ -513,3 +512,101 @@ function closeForm(event) {
 	event.preventDefault(); // Ngăn chặn gửi form
 	hideNote(); // Ẩn note
 }
+
+
+$(document).ready(function() {
+	$('#updatePostButton').on('click', function (event) {
+		event.preventDefault();
+		let href = $(this).attr('href');
+		$.get(href, function (post) {
+			console.log(post)
+			$('#postId').val(post.postId);
+			$('#updateTitle').val(post.postTopic);
+			$('#updatePostContent').val(post.postContent);
+		});
+		$('#updatePost').modal();
+	});
+});
+$(document).ready(function() {
+	$('.postCollapse').on('click', function () {
+		let href = $(this).attr('href');
+		$.get(href, function (data) {
+			$('#postIdReply').val(data.post.postId);
+			$('#postCollapseUser').text(data.post.student.fullName);
+			$('#replyForm').text('Reply - ' + data.post.student.fullName);
+			$('#postCollapseDate').text(formatDate(data.post.dateCreated));
+			$('#postCollapseTopic').text(data.post.postTopic);
+			$('#postCollapseContent').text(data.post.postContent);
+			let comments = data.comments;
+			let commentsContainer = $('#commentsContainer');
+			commentsContainer.html(''); // Clear the container first
+			comments.forEach(function(comment) {
+				let commentHTML = `
+                    <div class="card mb-2" style="background-color: #ADD8E6;" data-comment-id="${comment.cmtId}">
+                        <div class="card-body">
+                            <div class="media forum-item">
+                                <a class="card-link">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle"
+                                        width="50" alt="User"/>
+                                    <small class="d-block text-center text-muted">${comment.student.fullName}</small>
+                                </a>
+                                <div class="media-body ml-3">
+                                    <p class="text-secondary">${comment.cmtContent}</p>
+                                    <small class="text-secondary">${formatDate(comment.dateCreated)}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+				commentsContainer.append(commentHTML);
+			});
+		});
+	});
+});
+//HandleReply
+$(document).ready(function() {
+	$("#replyFormHandle").on("submit", function(event) {
+		event.preventDefault(); // Ngăn chặn việc tải lại trang
+
+		let postId = $("#postIdReply").val(); // Lấy id của post từ form
+		let formValues = $(this).serialize(); // Lấy dữ liệu từ form
+
+		$.ajax({
+			url: "/reply-post/postId=" + postId, // URL của PostMapping bạn đã tạo trong Spring Boot
+			type: "post",
+			data: formValues,
+			success: function() {
+				$("#collapseReply").collapse('hide');
+				$("#exampleFormControlTextarea1").val('');
+				// Tải lại các comment
+				$.get('/get-comments/postId=' + postId, function(data) {
+					let comments = data;
+					let commentsContainer = $('#commentsContainer');
+					commentsContainer.html(''); // Clear the container first
+					comments.forEach(function(comment) {
+						let commentHTML = `
+						<div class="card mb-2" style="background-color: #ADD8E6;" data-comment-id="${comment.cmtId}">
+							<div class="card-body">
+								<div class="media forum-item">
+									<a class="card-link">
+										<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle"
+											width="50" alt="User"/>
+										<small class="d-block text-center text-muted">${comment.student.fullName}</small>
+									</a>
+									<div class="media-body ml-3">
+										<p class="text-secondary">${comment.cmtContent}</p>
+										<small class="text-secondary">${formatDate(comment.dateCreated)}</small>
+									</div>						
+								</div>
+							</div>
+						</div>`;
+						commentsContainer.append(commentHTML);
+					});
+				});
+			},
+			error: function(error) {
+				// Xử lý lỗi ở đây
+				console.log(error);
+			}
+		});
+	});
+});
